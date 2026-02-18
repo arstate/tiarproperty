@@ -58,31 +58,77 @@ const properties: Property[] = [
 
 export const PropertyShowcase: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [hoveredId, setHoveredId] = useState<number | null>(null);
+  const [centerId, setCenterId] = useState<number>(1);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
   
   // Transform vertical scroll to horizontal scroll for this section
-  // Strictly captures scroll to prevent page movement when cursor is in slider
   useEffect(() => {
     const el = scrollRef.current;
     if (el) {
       const onWheel = (e: WheelEvent) => {
         if (e.deltaY === 0) return;
-
-        // STOP propagation and prevent default to lock scroll to this element only
         e.preventDefault();
         e.stopPropagation();
-        
-        // Use scrollTo with smooth behavior for nice wheel inertia
         el.scrollTo({
-          left: el.scrollLeft + e.deltaY * 3, // Multiplier for faster traversal
+          left: el.scrollLeft + e.deltaY * 3,
           behavior: 'smooth'
         });
       };
-      
       el.addEventListener('wheel', onWheel, { passive: false });
       return () => el.removeEventListener('wheel', onWheel);
     }
   }, []);
+
+  // Check for desktop size
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 768);
+    };
+    
+    // Initial check
+    handleResize();
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Track scroll position to determine center item
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const handleScroll = () => {
+      const containerCenter = el.scrollLeft + el.clientWidth / 2;
+      
+      let closestId = -1;
+      let minDist = Infinity;
+
+      const cards = el.querySelectorAll('[data-card-id]');
+      cards.forEach((card) => {
+        const htmlCard = card as HTMLElement;
+        const cardCenter = htmlCard.offsetLeft + htmlCard.offsetWidth / 2;
+        const dist = Math.abs(containerCenter - cardCenter);
+        if (dist < minDist) {
+          minDist = dist;
+          closestId = Number(htmlCard.getAttribute('data-card-id'));
+        }
+      });
+      
+      if (closestId !== -1) {
+        setCenterId(closestId);
+      }
+    };
+
+    el.addEventListener('scroll', handleScroll, { passive: true });
+    // Initial check
+    handleScroll();
+    
+    return () => el.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Helper to determine if we should show the "All Visible" state
+  const showAll = isDesktop && !isHovered;
 
   return (
     <section id="area" className="py-24 bg-white relative overflow-hidden z-20">
@@ -103,81 +149,96 @@ export const PropertyShowcase: React.FC = () => {
       {/* Horizontal Container */}
       <div 
         ref={scrollRef}
-        // Increased padding (px-8 md:px-24) to prevent first/last items from hitting the edge
-        // Added pt-16 pb-16 to ensure top/bottom scaling doesn't get clipped
-        className="flex overflow-x-auto gap-8 px-8 md:px-24 py-16 snap-x snap-mandatory no-scrollbar items-center"
-        style={{ scrollPaddingLeft: '2rem', scrollPaddingRight: '2rem' }}
-        onMouseLeave={() => setHoveredId(null)}
+        className="flex overflow-x-auto gap-4 md:gap-8 px-8 md:px-24 py-12 snap-x snap-mandatory no-scrollbar items-center"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
       >
-        {properties.map((prop, index) => (
-          <motion.div 
-            key={prop.id}
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            onHoverStart={() => setHoveredId(prop.id)}
-            animate={{
-              scale: hoveredId === null ? 1 : hoveredId === prop.id ? 1.15 : 0.9,
-              opacity: hoveredId === null || hoveredId === prop.id ? 1 : 0.5,
-              filter: hoveredId === null || hoveredId === prop.id ? "blur(0px)" : "blur(4px)",
-              zIndex: hoveredId === prop.id ? 50 : 1,
-            }}
-            transition={{
-              type: "spring",
-              stiffness: 300,
-              damping: 20
-            }}
-            className="min-w-[85vw] md:min-w-[400px] snap-center cursor-pointer bg-white rounded-2xl shadow-lg border border-gray-100 p-4"
-          >
-            <div className="relative aspect-[4/3] overflow-hidden rounded-xl mb-6">
-              <div className="absolute top-4 left-4 z-10 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-luxury-green uppercase tracking-wide">
-                {prop.tag}
-              </div>
-              <motion.img 
-                src={prop.image} 
-                alt={prop.title} 
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-60"></div>
-              
-              <div className="absolute bottom-4 left-4 text-white">
-                <p className="font-bold text-xl">{prop.price}</p>
-              </div>
-            </div>
+        {properties.map((prop, index) => {
+          // On Desktop, we ignore centerId for styling to avoid auto-focusing items on scroll.
+          // Focus is driven purely by hover on Desktop.
+          // On Mobile, we keep centerId logic for the carousel feel.
+          const isCentered = !isDesktop && (centerId === prop.id);
 
-            <div>
-              <h3 className="font-serif text-2xl text-luxury-green">{prop.title}</h3>
-              <div className="flex items-center gap-2 text-luxury-slate text-sm mt-1 mb-3">
-                <MapPin size={14} />
-                {prop.location}
-              </div>
-              <div className="flex gap-4 border-t border-gray-100 pt-3">
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <Bed size={16} /> {prop.beds} Beds
+          return (
+            <motion.div 
+              key={prop.id}
+              data-card-id={prop.id}
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              animate={{
+                scale: showAll ? 1 : (isCentered ? 1 : 0.9),
+                opacity: showAll ? 1 : (isCentered ? 1 : 0.6),
+                filter: showAll ? "blur(0px)" : (isCentered ? "blur(0px)" : "blur(2px)"),
+                zIndex: isCentered ? 10 : 1,
+              }}
+              whileHover={{ 
+                scale: 1.05,
+                opacity: 1,
+                filter: "blur(0px)",
+                zIndex: 20
+              }}
+              transition={{
+                type: "spring",
+                stiffness: 300,
+                damping: 20
+              }}
+              className="min-w-[70vw] md:min-w-[400px] snap-center cursor-pointer bg-white rounded-2xl shadow-lg border border-gray-100 p-4"
+            >
+              <div className="relative aspect-[4/3] overflow-hidden rounded-xl mb-6">
+                <div className="absolute top-4 left-4 z-10 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-luxury-green uppercase tracking-wide">
+                  {prop.tag}
                 </div>
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <Bath size={16} /> {prop.baths} Baths
+                <motion.img 
+                  src={prop.image} 
+                  alt={prop.title} 
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-60"></div>
+                
+                <div className="absolute bottom-4 left-4 text-white">
+                  <p className="font-bold text-xl">{prop.price}</p>
                 </div>
               </div>
-            </div>
-          </motion.div>
-        ))}
+
+              <div>
+                <h3 className="font-serif text-2xl text-luxury-green">{prop.title}</h3>
+                <div className="flex items-center gap-2 text-luxury-slate text-sm mt-1 mb-3">
+                  <MapPin size={14} />
+                  {prop.location}
+                </div>
+                <div className="flex gap-4 border-t border-gray-100 pt-3">
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <Bed size={16} /> {prop.beds} Beds
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <Bath size={16} /> {prop.baths} Baths
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          );
+        })}
         
         {/* Call to action card at end of scroll */}
         <motion.div 
-          onHoverStart={() => setHoveredId(999)}
+          data-card-id={999}
           animate={{
-            scale: hoveredId === null ? 1 : hoveredId === 999 ? 1.15 : 0.9,
-            opacity: hoveredId === null || hoveredId === 999 ? 1 : 0.5,
-            filter: hoveredId === null || hoveredId === 999 ? "blur(0px)" : "blur(4px)",
-            zIndex: hoveredId === 999 ? 50 : 1,
+            scale: showAll ? 1 : ((!isDesktop && centerId === 999) ? 1 : 0.9),
+            opacity: showAll ? 1 : ((!isDesktop && centerId === 999) ? 1 : 0.6),
+            filter: showAll ? "blur(0px)" : ((!isDesktop && centerId === 999) ? "blur(0px)" : "blur(2px)"),
+          }}
+          whileHover={{ 
+            scale: 1.05,
+            opacity: 1,
+            filter: "blur(0px)",
           }}
           transition={{
             type: "spring",
             stiffness: 300,
             damping: 20
           }}
-          className="min-w-[85vw] md:min-w-[300px] snap-center flex items-center justify-center bg-luxury-green rounded-2xl p-8 text-center text-white"
+          className="min-w-[70vw] md:min-w-[300px] snap-center flex items-center justify-center bg-luxury-green rounded-2xl p-8 text-center text-white"
         >
           <div>
             <h3 className="font-serif text-2xl mb-4">Masih banyak lagi...</h3>
