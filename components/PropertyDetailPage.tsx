@@ -159,119 +159,122 @@ export const PropertyDetailPage: React.FC = () => {
   const remainingCount = property.gallery.length > 2 ? property.gallery.length - 2 : 0;
 
   return (
-    <div className="bg-white min-h-screen pt-36 pb-24 md:pb-12 font-sans relative">
+    <div className="bg-white min-h-screen pt-36 pb-24 font-sans relative">
         
         {/* Breadcrumb / Back */}
-        <div className="max-w-7xl mx-auto px-6 mb-6">
+        <div className="max-w-7xl mx-auto px-6 mb-8">
             <button 
                 onClick={() => window.location.hash = '#/cari-rumah'}
-                className="flex items-center gap-2 text-luxury-slate hover:text-luxury-green transition-colors text-sm font-semibold uppercase tracking-wider cursor-pointer"
+                className="flex items-center gap-2 text-luxury-slate hover:text-luxury-green transition-colors text-sm font-semibold uppercase tracking-wider cursor-pointer bg-transparent border-none"
             >
                 <ArrowLeft size={16} /> Kembali ke Katalog
             </button>
         </div>
 
-        {/* Hero Image Grid */}
+        {/* Hero Image Grid - Fixed aspect ratios for zoom stability */}
         <div className="max-w-7xl mx-auto px-6 mb-12">
-            {/* Added min-h-[500px] to prevent squash on zoom out/small screens */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 h-auto lg:h-[60vh] lg:min-h-[500px]">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
                 {/* Main Image (Left) */}
-                <div className="lg:col-span-8 h-[40vh] lg:h-full rounded-3xl overflow-hidden relative group">
+                <div className="lg:col-span-8 aspect-video lg:aspect-auto lg:h-[600px] rounded-3xl overflow-hidden relative group shadow-lg">
                      <img src={property.mainImage} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Main" />
                      <div className="absolute top-6 left-6 bg-white/90 backdrop-blur px-4 py-2 rounded-full text-luxury-green font-bold text-sm uppercase tracking-wide">
                         {property.type}
                      </div>
                 </div>
 
-                {/* Side Images (Right) - Switched to Grid for better stability than Flex column */}
-                <div className="lg:col-span-4 grid grid-cols-2 lg:grid-cols-1 lg:grid-rows-2 gap-4 h-[20vh] lg:h-full">
+                {/* Side Images (Right) */}
+                <div className="lg:col-span-4 grid grid-cols-2 lg:grid-cols-1 gap-4 lg:h-[600px]">
                     {/* Top Right */}
-                    <div className="w-full h-full rounded-3xl overflow-hidden relative group">
+                    <div className="aspect-square lg:aspect-auto lg:h-full rounded-3xl overflow-hidden relative group shadow-md">
                         <img src={galleryImage1} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Gallery 1" />
                     </div>
                     
-                    {/* Bottom Right (with Overlay if needed) */}
-                    {galleryImage2 ? (
-                         <div className="w-full h-full rounded-3xl overflow-hidden relative group cursor-pointer">
-                            <img src={galleryImage2} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Gallery 2" />
-                            {remainingCount > 0 && (
-                                <div className="absolute inset-0 bg-black/50 flex items-center justify-center text-white font-bold text-xl hover:bg-black/40 transition-colors backdrop-blur-[2px]">
-                                    +{remainingCount} More Photos
-                                </div>
-                            )}
-                        </div>
-                    ) : (
-                         <div className="w-full h-full rounded-3xl overflow-hidden relative bg-gray-100 flex items-center justify-center text-gray-400">
-                             <p className="text-sm">No more photos</p>
-                        </div>
-                    )}
+                    {/* Bottom Right */}
+                    <div className="aspect-square lg:aspect-auto lg:h-full rounded-3xl overflow-hidden relative group cursor-pointer shadow-md">
+                        {galleryImage2 ? (
+                            <>
+                                <img src={galleryImage2} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Gallery 2" />
+                                {remainingCount > 0 && (
+                                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center text-white font-bold text-xl hover:bg-black/40 transition-colors backdrop-blur-[2px]">
+                                        +{remainingCount} More Photos
+                                    </div>
+                                )}
+                            </>
+                        ) : (
+                            <div className="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400">
+                                <p className="text-sm">No more photos</p>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
 
-        {/* Main Content Grid - Harmonized breakpoints to LG (1024px) to prevent layout shifts on laptop zoom */}
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12">
+        {/* Main Content Grid - Using XL to ensure enough width for side-by-side layout */}
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 xl:grid-cols-12 gap-12 relative">
             
             {/* Left Content: Details */}
-            <div className="lg:col-span-8">
+            <div className="xl:col-span-8 relative z-10">
                 
                 {/* Title Section */}
                 <div className="mb-8 border-b border-gray-100 pb-8">
-                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-4">
+                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-4">
                         <div>
-                            <h1 className="font-serif text-4xl md:text-5xl text-luxury-green mb-2">{property.title}</h1>
+                            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-luxury-green mb-3 leading-tight">{property.title}</h1>
                             <div className="flex items-center gap-2 text-luxury-slate text-lg">
-                                <MapPin size={18} /> {property.location}
+                                <MapPin size={20} className="text-luxury-gold" /> {property.location}
                             </div>
                         </div>
                         <div className="flex gap-2">
-                             <button className="p-3 rounded-full border border-gray-200 hover:bg-gray-50 text-luxury-slate transition-colors cursor-pointer">
+                             <button className="p-3 rounded-full border border-gray-200 hover:bg-luxury-gold hover:text-white hover:border-luxury-gold text-luxury-slate transition-all cursor-pointer bg-white">
                                 <Share2 size={20} />
                              </button>
                         </div>
                     </div>
 
                     {/* Quick Specs Grid */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
-                        <div className="bg-luxury-offwhite p-4 rounded-2xl flex flex-col items-center justify-center text-center">
-                            <Bed size={24} className="text-luxury-gold mb-2" />
-                            <span className="font-bold text-luxury-green text-lg">{property.beds}</span>
-                            <span className="text-xs text-gray-500 uppercase">Kamar Tidur</span>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10">
+                        <div className="bg-luxury-offwhite p-5 rounded-2xl flex flex-col items-center justify-center text-center border border-gray-50">
+                            <Bed size={28} className="text-luxury-gold mb-2" />
+                            <span className="font-bold text-luxury-green text-xl">{property.beds}</span>
+                            <span className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Kamar Tidur</span>
                         </div>
-                        <div className="bg-luxury-offwhite p-4 rounded-2xl flex flex-col items-center justify-center text-center">
-                            <Bath size={24} className="text-luxury-gold mb-2" />
-                            <span className="font-bold text-luxury-green text-lg">{property.baths}</span>
-                            <span className="text-xs text-gray-500 uppercase">Kamar Mandi</span>
+                        <div className="bg-luxury-offwhite p-5 rounded-2xl flex flex-col items-center justify-center text-center border border-gray-50">
+                            <Bath size={28} className="text-luxury-gold mb-2" />
+                            <span className="font-bold text-luxury-green text-xl">{property.baths}</span>
+                            <span className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Kamar Mandi</span>
                         </div>
-                         <div className="bg-luxury-offwhite p-4 rounded-2xl flex flex-col items-center justify-center text-center">
-                            <Maximize size={24} className="text-luxury-gold mb-2" />
-                            <span className="font-bold text-luxury-green text-lg">{property.landSize}</span>
-                            <span className="text-xs text-gray-500 uppercase">Luas Tanah</span>
+                         <div className="bg-luxury-offwhite p-5 rounded-2xl flex flex-col items-center justify-center text-center border border-gray-50">
+                            <Maximize size={28} className="text-luxury-gold mb-2" />
+                            <span className="font-bold text-luxury-green text-xl">{property.landSize}</span>
+                            <span className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Luas Tanah</span>
                         </div>
-                         <div className="bg-luxury-offwhite p-4 rounded-2xl flex flex-col items-center justify-center text-center">
-                            <ShieldCheck size={24} className="text-luxury-gold mb-2" />
-                            <span className="font-bold text-luxury-green text-lg">SHM</span>
-                            <span className="text-xs text-gray-500 uppercase">Sertifikat</span>
+                         <div className="bg-luxury-offwhite p-5 rounded-2xl flex flex-col items-center justify-center text-center border border-gray-50">
+                            <ShieldCheck size={28} className="text-luxury-gold mb-2" />
+                            <span className="font-bold text-luxury-green text-xl">SHM</span>
+                            <span className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Sertifikat</span>
                         </div>
                     </div>
                 </div>
 
                 {/* Description */}
-                <div className="mb-10">
-                    <h2 className="font-serif text-2xl text-luxury-green mb-4">Deskripsi Hunian</h2>
-                    <p className="text-gray-600 leading-loose text-lg">
+                <div className="mb-12">
+                    <h2 className="font-serif text-3xl text-luxury-green mb-6">Deskripsi Hunian</h2>
+                    <p className="text-gray-600 leading-relaxed text-lg max-w-3xl">
                         {property.description}
                     </p>
                 </div>
 
                 {/* Facilities */}
-                <div className="mb-10">
-                    <h2 className="font-serif text-2xl text-luxury-green mb-6">Fasilitas Unggulan</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="mb-12">
+                    <h2 className="font-serif text-3xl text-luxury-green mb-8">Fasilitas Unggulan</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                         {property.features.map((feature: string, i: number) => (
-                            <div key={i} className="flex items-center gap-3 p-4 border border-gray-100 rounded-xl hover:border-luxury-gold/30 transition-colors">
-                                <CheckCircle2 size={20} className="text-luxury-green" />
-                                <span className="text-gray-700 font-medium">{feature}</span>
+                            <div key={i} className="flex items-center gap-4 p-5 bg-white border border-gray-100 rounded-2xl hover:border-luxury-gold transition-all hover:shadow-lg hover:shadow-luxury-gold/5">
+                                <div className="p-2 bg-luxury-green/5 rounded-full">
+                                    <CheckCircle2 size={22} className="text-luxury-green" />
+                                </div>
+                                <span className="text-gray-700 font-semibold">{feature}</span>
                             </div>
                         ))}
                     </div>
@@ -279,22 +282,17 @@ export const PropertyDetailPage: React.FC = () => {
 
             </div>
 
-            {/* Right Sidebar: Sticky Pricing & CTA */}
-            {/* 
-                UPDATES:
-                1. Breakpoint moved to lg:block (matches grid).
-                2. Top offset adjusted to 28 (safe below navbar).
-                3. Padding reduced to p-6 to save vertical space.
-                4. Max-height added for safety on extreme zoom.
-            */}
-            <div className="hidden lg:block lg:col-span-4">
-                <div className="sticky top-28 bg-white p-6 rounded-3xl shadow-xl border border-luxury-gold/20 z-10 max-h-[85vh] overflow-y-auto no-scrollbar">
-                    <div className="text-center mb-6">
-                         <p className="text-gray-500 text-sm mb-1">Harga Mulai</p>
-                         <div className="font-serif text-4xl text-luxury-green mb-2">{property.priceDisplay}</div>
-                         <p className="text-xs text-red-500 font-semibold bg-red-50 inline-block px-2 py-1 rounded">
-                            *Harga dapat berubah sewaktu-waktu
-                         </p>
+            {/* Right Sidebar: Sticky Pricing & CTA (Shown on XL only) */}
+            <div className="hidden xl:block xl:col-span-4 relative">
+                <div className="sticky top-28 bg-white p-8 rounded-[2.5rem] shadow-2xl border border-luxury-gold/10 z-20 max-h-[calc(100vh-140px)] overflow-y-auto no-scrollbar">
+                    <div className="text-center mb-8">
+                         <p className="text-luxury-gold font-bold uppercase tracking-[0.2em] text-[10px] mb-2">Exclusive Offer</p>
+                         <div className="font-serif text-4xl text-luxury-green mb-3">{property.priceDisplay}</div>
+                         <div className="inline-block px-3 py-1.5 bg-red-50 rounded-lg">
+                            <p className="text-[10px] text-red-500 font-bold uppercase tracking-wider">
+                                *Harga dapat berubah sewaktu-waktu
+                            </p>
+                         </div>
                     </div>
 
                     <div className="space-y-4">
@@ -304,26 +302,27 @@ export const PropertyDetailPage: React.FC = () => {
                             rel="noopener noreferrer"
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
-                            className="w-full py-4 bg-luxury-green text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-black transition-colors shadow-lg shadow-luxury-green/20"
+                            className="w-full py-5 bg-luxury-green text-white rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-black transition-all shadow-xl shadow-luxury-green/20"
                         >
-                            <MessageCircle size={20} />
+                            <MessageCircle size={22} />
                             Chat Admin WhatsApp
                         </motion.a>
                         
-                        <button className="w-full py-4 border border-luxury-green text-luxury-green rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-luxury-offwhite transition-colors cursor-pointer">
-                            <Phone size={20} />
+                        <button className="w-full py-5 border-2 border-luxury-green text-luxury-green rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-luxury-offwhite transition-all cursor-pointer bg-white">
+                            <Phone size={22} />
                             Jadwalkan Survey
                         </button>
                     </div>
 
-                    <div className="mt-8 pt-6 border-t border-gray-100">
-                        <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 rounded-full bg-luxury-gold overflow-hidden shrink-0">
-                                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=200" alt="Agent" className="w-full h-full object-cover" />
+                    <div className="mt-10 pt-8 border-t border-gray-100">
+                        <div className="flex items-center gap-5">
+                            <div className="w-16 h-16 rounded-full bg-luxury-gold p-0.5 overflow-hidden shrink-0 shadow-lg">
+                                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=200" alt="Agent" className="w-full h-full object-cover rounded-full" />
                             </div>
                             <div>
-                                <p className="text-sm text-gray-500">Listed by</p>
-                                <p className="font-bold text-luxury-green">Aries Kusheryana</p>
+                                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">Listed by</p>
+                                <p className="font-bold text-luxury-green text-lg">Aries Kusheryana</p>
+                                <p className="text-xs text-luxury-gold font-medium">Senior Property Consultant</p>
                             </div>
                         </div>
                     </div>
@@ -332,20 +331,20 @@ export const PropertyDetailPage: React.FC = () => {
 
         </div>
 
-        {/* Mobile/Tablet Fixed Bottom CTA Bar (Visible only when sidebar is hidden - lg:hidden) */}
-        <div className="lg:hidden fixed bottom-0 inset-x-0 bg-white border-t border-gray-200 p-4 shadow-[0_-5px_20px_rgba(0,0,0,0.1)] z-40 flex items-center justify-between gap-4">
+        {/* Mobile/Tablet/Small Desktop Fixed Bottom CTA Bar (Visible when sidebar is hidden) */}
+        <div className="xl:hidden fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-xl border-t border-gray-200 p-5 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] z-40 flex items-center justify-between gap-5">
             <div className="flex-1">
-                 <p className="text-xs text-gray-500">Harga Mulai</p>
-                 <p className="font-serif text-xl font-bold text-luxury-green">{property.priceDisplay}</p>
+                 <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Harga Mulai</p>
+                 <p className="font-serif text-2xl font-bold text-luxury-green">{property.priceDisplay}</p>
             </div>
             <a 
                 href={whatsappLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-luxury-green text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 shadow-lg"
+                className="bg-luxury-green text-white px-8 py-4 rounded-2xl font-bold flex items-center gap-2 shadow-lg active:scale-95 transition-transform"
             >
                 <MessageCircle size={20} />
-                Chat WhatsApp
+                WhatsApp
             </a>
         </div>
 
