@@ -21,7 +21,8 @@ const propertyDB = [
     gallery: [
       "https://picsum.photos/800/600?random=101",
       "https://picsum.photos/800/600?random=102",
-      "https://picsum.photos/800/600?random=103"
+      "https://picsum.photos/800/600?random=103",
+      "https://picsum.photos/800/600?random=104"
     ]
   },
   {
@@ -152,8 +153,13 @@ export const PropertyDetailPage: React.FC = () => {
   const whatsappMessage = `Halo Admin Tiar Property, saya tertarik dengan unit *${property.title}* di ${property.location} yang harganya ${property.priceDisplay}. Boleh minta info pricelist dan simulasi KPR?`;
   const whatsappLink = `https://wa.me/6282227896809?text=${encodeURIComponent(whatsappMessage)}`;
 
+  // Safe access to gallery items
+  const galleryImage1 = property.gallery.length > 0 ? property.gallery[0] : property.mainImage;
+  const galleryImage2 = property.gallery.length > 1 ? property.gallery[1] : null;
+  const remainingCount = property.gallery.length > 2 ? property.gallery.length - 2 : 0;
+
   return (
-    <div className="bg-white min-h-screen pt-24 pb-12 font-sans">
+    <div className="bg-white min-h-screen pt-24 pb-24 md:pb-12 font-sans relative">
         
         {/* Breadcrumb / Back */}
         <div className="max-w-7xl mx-auto px-6 mb-6">
@@ -167,35 +173,46 @@ export const PropertyDetailPage: React.FC = () => {
 
         {/* Hero Image Grid */}
         <div className="max-w-7xl mx-auto px-6 mb-12">
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-4 h-[50vh] md:h-[60vh]">
-                <div className="md:col-span-8 h-full rounded-3xl overflow-hidden relative group">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 h-auto lg:h-[60vh]">
+                {/* Main Image (Left) */}
+                <div className="lg:col-span-8 h-[40vh] lg:h-full rounded-3xl overflow-hidden relative group">
                      <img src={property.mainImage} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Main" />
                      <div className="absolute top-6 left-6 bg-white/90 backdrop-blur px-4 py-2 rounded-full text-luxury-green font-bold text-sm uppercase tracking-wide">
                         {property.type}
                      </div>
                 </div>
-                <div className="md:col-span-4 flex flex-col gap-4 h-full">
-                    {property.gallery.slice(0, 2).map((img: string, i: number) => (
-                        <div key={i} className="h-1/2 rounded-3xl overflow-hidden relative group">
-                            <img src={img} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Gallery" />
+
+                {/* Side Images (Right) - Fixed Flex Layout for Desktop, Hidden/Different for Mobile? No, keep stacked on mobile */}
+                <div className="lg:col-span-4 flex lg:flex-col gap-4 h-[20vh] lg:h-full">
+                    {/* Top Right */}
+                    <div className="flex-1 rounded-3xl overflow-hidden relative group">
+                        <img src={galleryImage1} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Gallery 1" />
+                    </div>
+                    
+                    {/* Bottom Right (with Overlay if needed) */}
+                    {galleryImage2 ? (
+                         <div className="flex-1 rounded-3xl overflow-hidden relative group cursor-pointer">
+                            <img src={galleryImage2} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Gallery 2" />
+                            {remainingCount > 0 && (
+                                <div className="absolute inset-0 bg-black/50 flex items-center justify-center text-white font-bold text-xl hover:bg-black/40 transition-colors backdrop-blur-[2px]">
+                                    +{remainingCount} More Photos
+                                </div>
+                            )}
                         </div>
-                    ))}
-                    {property.gallery.length > 2 && (
-                         <div className="h-1/2 rounded-3xl overflow-hidden relative group bg-black cursor-pointer">
-                            <img src={property.gallery[2]} className="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity" alt="More" />
-                            <div className="absolute inset-0 flex items-center justify-center text-white font-bold text-lg">
-                                +{property.gallery.length - 2} More Photos
-                            </div>
+                    ) : (
+                         <div className="flex-1 rounded-3xl overflow-hidden relative bg-gray-100 flex items-center justify-center text-gray-400">
+                             <p className="text-sm">No more photos</p>
                         </div>
                     )}
                 </div>
             </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12">
+        {/* Main Content Grid - Using XL breakpoint to prevent overlapping on small desktops (iPad Pro, Laptop 13") */}
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 xl:grid-cols-12 gap-12">
             
             {/* Left Content: Details */}
-            <div className="lg:col-span-8">
+            <div className="xl:col-span-8">
                 
                 {/* Title Section */}
                 <div className="mb-8 border-b border-gray-100 pb-8">
@@ -261,9 +278,9 @@ export const PropertyDetailPage: React.FC = () => {
 
             </div>
 
-            {/* Right Sidebar: Sticky Pricing & CTA */}
-            <div className="lg:col-span-4">
-                <div className="sticky top-32 bg-white p-8 rounded-3xl shadow-xl border border-luxury-gold/20">
+            {/* Right Sidebar: Sticky Pricing & CTA (Hidden on Mobile/Tablet/Small Desktop, Shown on Large Desktop) */}
+            <div className="hidden xl:block xl:col-span-4">
+                <div className="sticky top-32 bg-white p-8 rounded-3xl shadow-xl border border-luxury-gold/20 z-10">
                     <div className="text-center mb-6">
                          <p className="text-gray-500 text-sm mb-1">Harga Mulai</p>
                          <div className="font-serif text-4xl text-luxury-green mb-2">{property.priceDisplay}</div>
@@ -305,6 +322,23 @@ export const PropertyDetailPage: React.FC = () => {
                 </div>
             </div>
 
+        </div>
+
+        {/* Mobile/Tablet/Small Desktop Fixed Bottom CTA Bar (Visible only when sidebar is hidden) */}
+        <div className="xl:hidden fixed bottom-0 inset-x-0 bg-white border-t border-gray-200 p-4 shadow-[0_-5px_20px_rgba(0,0,0,0.1)] z-40 flex items-center justify-between gap-4">
+            <div className="flex-1">
+                 <p className="text-xs text-gray-500">Harga Mulai</p>
+                 <p className="font-serif text-xl font-bold text-luxury-green">{property.priceDisplay}</p>
+            </div>
+            <a 
+                href={whatsappLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-luxury-green text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 shadow-lg"
+            >
+                <MessageCircle size={20} />
+                Chat WhatsApp
+            </a>
         </div>
 
     </div>
