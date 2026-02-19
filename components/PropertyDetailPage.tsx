@@ -209,11 +209,11 @@ export const PropertyDetailPage: React.FC = () => {
             </div>
         </div>
 
-        {/* Main Content Grid - Using XL breakpoint to prevent overlapping on small desktops (iPad Pro, Laptop 13") */}
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 xl:grid-cols-12 gap-12">
+        {/* Main Content Grid - Harmonized breakpoints to LG (1024px) to prevent layout shifts on laptop zoom */}
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12">
             
             {/* Left Content: Details */}
-            <div className="xl:col-span-8">
+            <div className="lg:col-span-8">
                 
                 {/* Title Section */}
                 <div className="mb-8 border-b border-gray-100 pb-8">
@@ -279,10 +279,16 @@ export const PropertyDetailPage: React.FC = () => {
 
             </div>
 
-            {/* Right Sidebar: Sticky Pricing & CTA (Hidden on Mobile/Tablet/Small Desktop, Shown on Large Desktop) */}
-            {/* Adjusted sticky top position to top-28 for better vertical fit on zoomed screens */}
-            <div className="hidden xl:block xl:col-span-4">
-                <div className="sticky top-28 bg-white p-8 rounded-3xl shadow-xl border border-luxury-gold/20 z-10">
+            {/* Right Sidebar: Sticky Pricing & CTA */}
+            {/* 
+                UPDATES:
+                1. Breakpoint moved to lg:block (matches grid).
+                2. Top offset adjusted to 28 (safe below navbar).
+                3. Padding reduced to p-6 to save vertical space.
+                4. Max-height added for safety on extreme zoom.
+            */}
+            <div className="hidden lg:block lg:col-span-4">
+                <div className="sticky top-28 bg-white p-6 rounded-3xl shadow-xl border border-luxury-gold/20 z-10 max-h-[85vh] overflow-y-auto no-scrollbar">
                     <div className="text-center mb-6">
                          <p className="text-gray-500 text-sm mb-1">Harga Mulai</p>
                          <div className="font-serif text-4xl text-luxury-green mb-2">{property.priceDisplay}</div>
@@ -312,7 +318,7 @@ export const PropertyDetailPage: React.FC = () => {
 
                     <div className="mt-8 pt-6 border-t border-gray-100">
                         <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 rounded-full bg-luxury-gold overflow-hidden">
+                            <div className="w-12 h-12 rounded-full bg-luxury-gold overflow-hidden shrink-0">
                                 <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=200" alt="Agent" className="w-full h-full object-cover" />
                             </div>
                             <div>
@@ -326,8 +332,8 @@ export const PropertyDetailPage: React.FC = () => {
 
         </div>
 
-        {/* Mobile/Tablet/Small Desktop Fixed Bottom CTA Bar (Visible only when sidebar is hidden) */}
-        <div className="xl:hidden fixed bottom-0 inset-x-0 bg-white border-t border-gray-200 p-4 shadow-[0_-5px_20px_rgba(0,0,0,0.1)] z-40 flex items-center justify-between gap-4">
+        {/* Mobile/Tablet Fixed Bottom CTA Bar (Visible only when sidebar is hidden - lg:hidden) */}
+        <div className="lg:hidden fixed bottom-0 inset-x-0 bg-white border-t border-gray-200 p-4 shadow-[0_-5px_20px_rgba(0,0,0,0.1)] z-40 flex items-center justify-between gap-4">
             <div className="flex-1">
                  <p className="text-xs text-gray-500">Harga Mulai</p>
                  <p className="font-serif text-xl font-bold text-luxury-green">{property.priceDisplay}</p>
