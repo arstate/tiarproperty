@@ -183,6 +183,7 @@ export const PropertyShowcase: React.FC = () => {
                 stiffness: 300,
                 damping: 20
               }}
+              onClick={() => window.location.hash = `#/properti/${prop.id}`}
               className="min-w-[70vw] md:min-w-[400px] snap-center cursor-pointer bg-white rounded-2xl shadow-lg border border-gray-100 p-4"
             >
               <div className="relative aspect-[4/3] overflow-hidden rounded-xl mb-6">

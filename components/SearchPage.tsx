@@ -197,6 +197,7 @@ export const SearchPage: React.FC = () => {
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: i * 0.05 }}
                         className="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-luxury-gold/10 border border-gray-100 transition-all duration-300 cursor-pointer"
+                        onClick={() => window.location.hash = `#/properti/${prop.id}`}
                     >
                         <div className="relative aspect-[4/3] overflow-hidden">
                             <div className="absolute top-4 left-4 z-10 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-luxury-green uppercase tracking-wide shadow-sm">
@@ -239,7 +240,13 @@ export const SearchPage: React.FC = () => {
                             </div>
                             
                             <div className="mt-6">
-                                <button className="w-full py-3 rounded-xl border border-luxury-green text-luxury-green font-bold hover:bg-luxury-green hover:text-white transition-all text-sm uppercase tracking-wide">
+                                <button 
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        window.location.hash = `#/properti/${prop.id}`;
+                                    }}
+                                    className="w-full py-3 rounded-xl border border-luxury-green text-luxury-green font-bold hover:bg-luxury-green hover:text-white transition-all text-sm uppercase tracking-wide cursor-pointer"
+                                >
                                     Lihat Detail
                                 </button>
                             </div>
