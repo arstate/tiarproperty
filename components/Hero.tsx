@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, ArrowDown } from 'lucide-react';
+import { ArrowRight, ArrowDown, Users } from 'lucide-react';
 
 export const Hero: React.FC = () => {
   return (
@@ -89,7 +89,7 @@ export const Hero: React.FC = () => {
                 </div>
               </motion.div>
 
-              {/* Architectural Floating Card 2 */}
+              {/* Architectural Floating Card 2 - Special Offer */}
               <motion.div 
                  animate={{ y: [0, 30, 0] }}
                  transition={{ repeat: Infinity, duration: 7, ease: "easeInOut", delay: 1 }}
@@ -103,6 +103,25 @@ export const Hero: React.FC = () => {
                     </div>
                  </div>
               </motion.div>
+
+              {/* NEW: Floating 'About Us' Trigger (Based on Screenshot Request) */}
+              <motion.div 
+                animate={{ y: [0, 20, 0] }}
+                transition={{ repeat: Infinity, duration: 8, ease: "easeInOut", delay: 1.5 }}
+                onClick={() => window.location.hash = '#/about-us'}
+                className="absolute bottom-40 left-48 w-44 bg-white/95 backdrop-blur-md p-5 z-20 rounded-2xl shadow-2xl cursor-pointer hover:scale-105 transition-transform border border-white/50 group"
+              >
+                <div className="flex items-center justify-between mb-2">
+                    <span className="w-10 h-10 rounded-full bg-luxury-yellow/20 flex items-center justify-center text-luxury-green">
+                        <Users size={18} />
+                    </span>
+                    <ArrowRight size={16} className="text-luxury-slate group-hover:text-luxury-green group-hover:translate-x-1 transition-all" />
+                </div>
+                <h4 className="font-serif text-lg text-luxury-green leading-tight">
+                    Lihat Lengkap <br/> <span className="italic text-luxury-gold">About Us</span>
+                </h4>
+              </motion.div>
+
            </motion.div>
         </div>
       </div>

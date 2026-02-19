@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
 
 export const AboutUs: React.FC = () => {
   return (
@@ -55,7 +56,7 @@ export const AboutUs: React.FC = () => {
               Berfokus di Surabaya & Sidoarjo, kami telah membantu lebih dari 500 keluarga memiliki aset pertama mereka melalui skema pembayaran yang inovatif dan pendampingan legalitas yang transparan.
             </p>
 
-            <div className="grid grid-cols-2 gap-8 pt-8 border-t border-gray-100">
+            <div className="grid grid-cols-2 gap-8 pt-8 border-t border-gray-100 mb-8">
               <div>
                 <p className="text-3xl font-bold text-luxury-green mb-1">500+</p>
                 <p className="text-sm text-luxury-slate uppercase tracking-wider font-medium">Happy Families</p>
@@ -65,6 +66,15 @@ export const AboutUs: React.FC = () => {
                 <p className="text-sm text-luxury-slate uppercase tracking-wider font-medium">Prime Areas</p>
               </div>
             </div>
+
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => window.location.hash = '#/about-us'}
+              className="inline-flex items-center gap-2 px-8 py-4 bg-luxury-green text-white rounded-full font-bold uppercase tracking-wider text-xs hover:bg-black transition-colors shadow-xl shadow-luxury-green/20 cursor-pointer"
+            >
+              Lihat Lengkap About Us <ArrowRight size={16} />
+            </motion.button>
           </motion.div>
         </div>
       </div>

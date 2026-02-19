@@ -4,6 +4,7 @@ import { Footer } from './components/Footer';
 import { ChatAgent } from './components/ChatAgent';
 import { LandingPage } from './components/LandingPage';
 import { SearchPage } from './components/SearchPage';
+import { AboutPage } from './components/AboutPage';
 
 export default function App() {
   const [route, setRoute] = useState(window.location.hash);
@@ -25,13 +26,20 @@ export default function App() {
   }, []);
 
   const isSearchPage = route.startsWith('#/cari-rumah');
+  const isAboutPage = route.startsWith('#/about-us');
 
   return (
     <div className="min-h-screen bg-luxury-offwhite font-sans overflow-x-hidden selection:bg-luxury-green selection:text-luxury-yellow">
       <Navbar />
       
       {/* Route Rendering */}
-      {isSearchPage ? <SearchPage /> : <LandingPage />}
+      {isSearchPage ? (
+        <SearchPage />
+      ) : isAboutPage ? (
+        <AboutPage />
+      ) : (
+        <LandingPage />
+      )}
 
       <Footer />
       
