@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Search, MapPin, DollarSign, Filter, Bed, Bath, ArrowRight } from 'lucide-react';
 
@@ -82,6 +82,13 @@ export const SearchPage: React.FC = () => {
   const [keyword, setKeyword] = useState("");
   const [locationFilter, setLocationFilter] = useState("All");
   const [priceFilter, setPriceFilter] = useState("All");
+
+  // Automatically scroll to top when component mounts
+  useEffect(() => {
+    if (window.scrollY > 0) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, []);
 
   const locations = ["All", ...Array.from(new Set(properties.map(p => p.location)))];
   
