@@ -13,6 +13,11 @@ export const Navbar: React.FC = () => {
     { name: 'Konsultasi', href: '#footer' },
   ];
 
+  const handleNav = (href: string) => {
+    window.location.hash = href;
+    setMobileMenuOpen(false);
+  };
+
   return (
     <>
       {/* 
@@ -44,38 +49,41 @@ export const Navbar: React.FC = () => {
           </motion.div>
 
           {/* Logo - Darker for readability on high-saturation glass */}
-          <a href="#" className="relative z-10 font-serif text-2xl font-bold tracking-tight text-luxury-green hover:scale-105 transition-transform">
+          <button 
+            onClick={() => handleNav('#home')} 
+            className="relative z-10 font-serif text-2xl font-bold tracking-tight text-luxury-green hover:scale-105 transition-transform bg-transparent border-none cursor-pointer"
+          >
             TIAR<span className="text-black/60">.</span>
-          </a>
+          </button>
 
           {/* Desktop Links - Bold and dark for maximum contrast */}
           <div className="hidden md:flex items-center gap-10 relative z-10">
             {links.map((link) => (
-              <a
+              <button
                 key={link.name}
-                href={link.href}
-                className="text-sm font-extrabold text-luxury-green hover:text-black transition-colors relative group tracking-wide antialiased"
+                onClick={() => handleNav(link.href)}
+                className="text-sm font-extrabold text-luxury-green hover:text-black transition-colors relative group tracking-wide antialiased bg-transparent border-none cursor-pointer"
               >
                 {link.name}
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-luxury-green transition-all group-hover:w-full" />
-              </a>
+              </button>
             ))}
           </div>
 
           {/* CTA Button (Desktop) - High contrast solid element */}
           <div className="hidden md:block relative z-10">
-            <a
-              href="#footer"
-              className="rounded-full bg-luxury-green px-8 py-2.5 text-xs font-extrabold text-white transition-all hover:scale-105 hover:bg-black active:scale-95 uppercase tracking-wider shadow-lg shadow-black/20"
+            <button
+              onClick={() => handleNav('#footer')}
+              className="rounded-full bg-luxury-green px-8 py-2.5 text-xs font-extrabold text-white transition-all hover:scale-105 hover:bg-black active:scale-95 uppercase tracking-wider shadow-lg shadow-black/20 border-none cursor-pointer"
             >
               Hubungi Kami
-            </a>
+            </button>
           </div>
 
           {/* Mobile Toggle */}
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden text-luxury-green p-1 active:scale-95 transition-transform relative z-10"
+            className="md:hidden text-luxury-green p-1 active:scale-95 transition-transform relative z-10 bg-transparent border-none cursor-pointer"
           >
             {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
@@ -102,32 +110,30 @@ export const Navbar: React.FC = () => {
               >
                 <div className="flex flex-col relative z-10">
                   {links.map((link, i) => (
-                    <motion.a
+                    <motion.button
                       key={link.name}
-                      href={link.href}
-                      onClick={() => setMobileMenuOpen(false)}
+                      onClick={() => handleNav(link.href)}
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: i * 0.05 }}
-                      className="font-serif text-lg text-luxury-green font-bold hover:bg-luxury-gold/10 px-4 py-3 rounded-xl transition-all flex items-center justify-between group"
+                      className="font-serif text-lg text-luxury-green font-bold hover:bg-luxury-gold/10 px-4 py-3 rounded-xl transition-all flex items-center justify-between group w-full text-left bg-transparent border-none cursor-pointer"
                     >
                       {link.name}
                       <ArrowRight size={16} className="text-luxury-gold opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-300" />
-                    </motion.a>
+                    </motion.button>
                   ))}
                 </div>
 
                 <div className="mt-2 pt-2 border-t border-luxury-green/10 px-2 pb-2">
-                  <motion.a
+                  <motion.button
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    href="#footer"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-center w-full py-3 bg-luxury-green text-white font-bold text-center rounded-xl text-sm hover:bg-black transition-colors shadow-inner"
+                    onClick={() => handleNav('#footer')}
+                    className="flex items-center justify-center w-full py-3 bg-luxury-green text-white font-bold text-center rounded-xl text-sm hover:bg-black transition-colors shadow-inner border-none cursor-pointer"
                   >
                     Hubungi Kami
-                  </motion.a>
+                  </motion.button>
                 </div>
               </motion.div>
             </>

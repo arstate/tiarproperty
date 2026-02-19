@@ -242,7 +242,10 @@ export const PropertyShowcase: React.FC = () => {
         >
           <div>
             <h3 className="font-serif text-2xl mb-4">Masih banyak lagi...</h3>
-            <button className="px-6 py-3 border border-luxury-yellow text-luxury-yellow hover:bg-luxury-yellow hover:text-luxury-green transition-colors rounded-full font-semibold">
+            <button 
+              onClick={() => window.location.hash = '#/cari-rumah'}
+              className="px-6 py-3 border border-luxury-yellow text-luxury-yellow hover:bg-luxury-yellow hover:text-luxury-green transition-colors rounded-full font-semibold inline-block cursor-pointer"
+            >
               Lihat Katalog Lengkap
             </button>
           </div>

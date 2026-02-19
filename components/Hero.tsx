@@ -39,9 +39,10 @@ export const Hero: React.FC = () => {
 
             <div className="flex flex-col sm:flex-row gap-4">
               <motion.button
+                onClick={() => window.location.hash = '#/cari-rumah'}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="group relative px-8 py-4 bg-luxury-green text-white rounded-none overflow-hidden"
+                className="group relative px-8 py-4 bg-luxury-green text-white rounded-none overflow-hidden inline-flex items-center justify-center cursor-pointer"
               >
                 <span className="absolute inset-0 w-full h-full bg-luxury-yellow/90 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></span>
                 <span className="relative flex items-center gap-2 font-semibold group-hover:text-luxury-green transition-colors">
