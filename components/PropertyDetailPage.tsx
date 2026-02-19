@@ -159,12 +159,12 @@ export const PropertyDetailPage: React.FC = () => {
   const remainingCount = property.gallery.length > 2 ? property.gallery.length - 2 : 0;
 
   return (
-    <div className="bg-white min-h-screen pt-24 pb-24 md:pb-12 font-sans relative">
+    <div className="bg-white min-h-screen pt-36 pb-24 md:pb-12 font-sans relative">
         
         {/* Breadcrumb / Back */}
         <div className="max-w-7xl mx-auto px-6 mb-6">
             <button 
-                onClick={() => window.history.back()}
+                onClick={() => window.location.hash = '#/cari-rumah'}
                 className="flex items-center gap-2 text-luxury-slate hover:text-luxury-green transition-colors text-sm font-semibold uppercase tracking-wider cursor-pointer"
             >
                 <ArrowLeft size={16} /> Kembali ke Katalog
