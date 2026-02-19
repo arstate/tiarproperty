@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
+import { AboutUs } from './components/AboutUs';
 import { BentoGrid } from './components/BentoGrid';
 import { PropertyShowcase } from './components/PropertyShowcase';
 import { ValueProps } from './components/ValueProps';
@@ -23,10 +24,12 @@ export default function App() {
       
       <main className="relative z-10">
         <Hero />
+        {/* Social Proof: Below Hero, Above BentoGrid */}
+        <SocialProof />
         <BentoGrid />
         <PropertyShowcase />
+        <AboutUs />
         <ValueProps />
-        <SocialProof />
       </main>
 
       <Footer />
