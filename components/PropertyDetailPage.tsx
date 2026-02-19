@@ -173,7 +173,8 @@ export const PropertyDetailPage: React.FC = () => {
 
         {/* Hero Image Grid */}
         <div className="max-w-7xl mx-auto px-6 mb-12">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 h-auto lg:h-[60vh]">
+            {/* Added min-h-[500px] to prevent squash on zoom out/small screens */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 h-auto lg:h-[60vh] lg:min-h-[500px]">
                 {/* Main Image (Left) */}
                 <div className="lg:col-span-8 h-[40vh] lg:h-full rounded-3xl overflow-hidden relative group">
                      <img src={property.mainImage} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Main" />
@@ -182,16 +183,16 @@ export const PropertyDetailPage: React.FC = () => {
                      </div>
                 </div>
 
-                {/* Side Images (Right) - Fixed Flex Layout for Desktop, Hidden/Different for Mobile? No, keep stacked on mobile */}
-                <div className="lg:col-span-4 flex lg:flex-col gap-4 h-[20vh] lg:h-full">
+                {/* Side Images (Right) - Switched to Grid for better stability than Flex column */}
+                <div className="lg:col-span-4 grid grid-cols-2 lg:grid-cols-1 lg:grid-rows-2 gap-4 h-[20vh] lg:h-full">
                     {/* Top Right */}
-                    <div className="flex-1 rounded-3xl overflow-hidden relative group">
+                    <div className="w-full h-full rounded-3xl overflow-hidden relative group">
                         <img src={galleryImage1} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Gallery 1" />
                     </div>
                     
                     {/* Bottom Right (with Overlay if needed) */}
                     {galleryImage2 ? (
-                         <div className="flex-1 rounded-3xl overflow-hidden relative group cursor-pointer">
+                         <div className="w-full h-full rounded-3xl overflow-hidden relative group cursor-pointer">
                             <img src={galleryImage2} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Gallery 2" />
                             {remainingCount > 0 && (
                                 <div className="absolute inset-0 bg-black/50 flex items-center justify-center text-white font-bold text-xl hover:bg-black/40 transition-colors backdrop-blur-[2px]">
@@ -200,7 +201,7 @@ export const PropertyDetailPage: React.FC = () => {
                             )}
                         </div>
                     ) : (
-                         <div className="flex-1 rounded-3xl overflow-hidden relative bg-gray-100 flex items-center justify-center text-gray-400">
+                         <div className="w-full h-full rounded-3xl overflow-hidden relative bg-gray-100 flex items-center justify-center text-gray-400">
                              <p className="text-sm">No more photos</p>
                         </div>
                     )}
@@ -279,8 +280,9 @@ export const PropertyDetailPage: React.FC = () => {
             </div>
 
             {/* Right Sidebar: Sticky Pricing & CTA (Hidden on Mobile/Tablet/Small Desktop, Shown on Large Desktop) */}
+            {/* Adjusted sticky top position to top-28 for better vertical fit on zoomed screens */}
             <div className="hidden xl:block xl:col-span-4">
-                <div className="sticky top-32 bg-white p-8 rounded-3xl shadow-xl border border-luxury-gold/20 z-10">
+                <div className="sticky top-28 bg-white p-8 rounded-3xl shadow-xl border border-luxury-gold/20 z-10">
                     <div className="text-center mb-6">
                          <p className="text-gray-500 text-sm mb-1">Harga Mulai</p>
                          <div className="font-serif text-4xl text-luxury-green mb-2">{property.priceDisplay}</div>
