@@ -47,8 +47,8 @@ export default function App() {
 
       <Footer />
       
-      {/* Floating AI Agent */}
-      <ChatAgent />
+      {/* Floating AI Agent - Hidden on Property Detail Page */}
+      {!isPropertyDetailPage && <ChatAgent />}
     </div>
   );
 }
