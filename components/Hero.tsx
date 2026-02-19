@@ -109,7 +109,7 @@ export const Hero: React.FC = () => {
                 animate={{ y: [0, 20, 0] }}
                 transition={{ repeat: Infinity, duration: 8, ease: "easeInOut", delay: 1.5 }}
                 onClick={() => window.location.hash = '#/about-us'}
-                className="absolute bottom-40 left-48 w-44 bg-white/95 backdrop-blur-md p-5 z-20 rounded-2xl shadow-2xl cursor-pointer hover:scale-105 transition-transform border border-white/50 group"
+                className="absolute bottom-20 left-48 w-44 bg-white/95 backdrop-blur-md p-5 z-20 rounded-2xl shadow-2xl cursor-pointer hover:scale-105 transition-transform border border-white/50 group"
               >
                 <div className="flex items-center justify-between mb-2">
                     <span className="w-10 h-10 rounded-full bg-luxury-yellow/20 flex items-center justify-center text-luxury-green">
