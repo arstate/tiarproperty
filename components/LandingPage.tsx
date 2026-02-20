@@ -7,23 +7,24 @@ import { ValueProps } from './ValueProps';
 import { SocialProof } from './SocialProof';
 import { DeveloperLogoSlider } from './DeveloperLogoSlider';
 
-export const LandingPage: React.FC = () => {
-  // Handle scroll to section on mount if hash exists (e.g. coming from Search Page)
+export const LandingPage: React.FC<{ currentHash?: string }> = ({ currentHash }) => {
+  // Handle scroll to section on mount or when hash changes
   useEffect(() => {
-    const hash = window.location.hash;
-    if (hash) {
+    const hash = currentHash || window.location.hash;
+    if (hash && hash !== '#') {
       // Small delay to ensure DOM is ready
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         const id = hash.replace('#', '');
         const element = document.getElementById(id);
         if (element) {
           element.scrollIntoView({ behavior: 'smooth' });
         }
       }, 100);
-    } else {
-        window.scrollTo(0, 0);
+      return () => clearTimeout(timer);
+    } else if (!hash || hash === '#') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  }, []);
+  }, [currentHash]);
 
   return (
     <main className="relative z-10">

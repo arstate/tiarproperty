@@ -14,21 +14,12 @@ export const Navbar: React.FC = () => {
   ];
 
   const handleNav = (href: string) => {
-    if (href.startsWith('/#')) {
-      const sectionId = href.split('#')[1];
-      if (window.location.pathname === '/') {
-        const element = document.getElementById(sectionId);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }
-      } else {
-        window.history.pushState({}, '', href);
-        window.dispatchEvent(new Event('pushstate'));
-      }
-    } else {
-      window.history.pushState({}, '', href);
-      window.dispatchEvent(new Event('pushstate'));
-    }
+    // Always update history to trigger route/hash changes
+    window.history.pushState({}, '', href);
+    window.dispatchEvent(new Event('pushstate'));
+    
+    // If we are already on the home page and it's a section link, 
+    // the LandingPage effect will handle the smooth scroll.
     setMobileMenuOpen(false);
   };
 
