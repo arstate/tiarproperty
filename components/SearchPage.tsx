@@ -203,7 +203,7 @@ export const SearchPage: React.FC = () => {
         >
             <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
                 {/* Keyword Input */}
-                <div className="md:col-span-5 relative group">
+                <div className="md:col-span-6 relative group">
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-luxury-gold transition-colors" size={20} />
                     <input 
                         type="text" 
@@ -235,13 +235,6 @@ export const SearchPage: React.FC = () => {
                         labelMap={(val: string) => val === "All" ? "Semua Harga" : val}
                     />
                 </div>
-                
-                {/* Search Button */}
-                <div className="md:col-span-1">
-                     <button className="w-full h-[52px] bg-luxury-green text-white rounded-2xl flex items-center justify-center hover:bg-black transition-colors shadow-lg shadow-luxury-green/20">
-                        <Search size={20} />
-                     </button>
-                </div>
             </div>
         </motion.div>
 
@@ -255,7 +248,10 @@ export const SearchPage: React.FC = () => {
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: i * 0.05 }}
                         className="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-luxury-gold/10 border border-gray-100 transition-all duration-300 cursor-pointer"
-                        onClick={() => window.location.hash = `#/properti/${prop.id}`}
+                        onClick={() => {
+                            window.history.pushState({}, '', `/properti/${prop.id}`);
+                            window.dispatchEvent(new Event('pushstate'));
+                        }}
                     >
                         <div className="relative aspect-[4/3] overflow-hidden">
                             <div className="absolute top-4 left-4 z-10 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-luxury-green uppercase tracking-wide shadow-sm">
@@ -301,7 +297,8 @@ export const SearchPage: React.FC = () => {
                                 <button 
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        window.location.hash = `#/properti/${prop.id}`;
+                                        window.history.pushState({}, '', `/properti/${prop.id}`);
+                                        window.dispatchEvent(new Event('pushstate'));
                                     }}
                                     className="w-full py-3 rounded-xl border border-luxury-green text-luxury-green font-bold hover:bg-luxury-green hover:text-white transition-all text-sm uppercase tracking-wide cursor-pointer"
                                 >

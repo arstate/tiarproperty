@@ -39,7 +39,10 @@ export const Hero: React.FC = () => {
 
             <div className="flex flex-col sm:flex-row gap-4">
               <motion.button
-                onClick={() => window.location.hash = '#/cari-rumah'}
+                onClick={() => {
+                  window.history.pushState({}, '', '/cari-rumah');
+                  window.dispatchEvent(new Event('pushstate'));
+                }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className="group relative px-8 py-4 bg-luxury-green text-white rounded-none overflow-hidden inline-flex items-center justify-center cursor-pointer"
@@ -108,7 +111,10 @@ export const Hero: React.FC = () => {
               <motion.div 
                 animate={{ y: [0, 20, 0] }}
                 transition={{ repeat: Infinity, duration: 8, ease: "easeInOut", delay: 1.5 }}
-                onClick={() => window.location.hash = '#/about-us'}
+                onClick={() => {
+                  window.history.pushState({}, '', '/about-us');
+                  window.dispatchEvent(new Event('pushstate'));
+                }}
                 className="absolute bottom-20 left-48 w-44 bg-white/95 backdrop-blur-md p-5 z-20 rounded-2xl shadow-2xl cursor-pointer hover:scale-105 transition-transform border border-white/50 group"
               >
                 <div className="flex items-center justify-between mb-2">

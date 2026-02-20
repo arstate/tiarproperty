@@ -6,15 +6,29 @@ export const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const links = [
-    { name: 'Home', href: '#home' },
-    { name: 'About', href: '#about' },
-    { name: 'Area', href: '#area' },
-    { name: 'Katalog', href: '#/cari-rumah' },
-    { name: 'Konsultasi', href: '#footer' },
+    { name: 'Home', href: '/' },
+    { name: 'About', href: '/#about' },
+    { name: 'Area', href: '/#area' },
+    { name: 'Katalog', href: '/cari-rumah' },
+    { name: 'Konsultasi', href: '/#footer' },
   ];
 
   const handleNav = (href: string) => {
-    window.location.hash = href;
+    if (href.startsWith('/#')) {
+      const sectionId = href.split('#')[1];
+      if (window.location.pathname === '/') {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      } else {
+        window.history.pushState({}, '', href);
+        window.dispatchEvent(new Event('pushstate'));
+      }
+    } else {
+      window.history.pushState({}, '', href);
+      window.dispatchEvent(new Event('pushstate'));
+    }
     setMobileMenuOpen(false);
   };
 

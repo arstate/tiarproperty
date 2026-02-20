@@ -11,8 +11,7 @@ export const LandingPage: React.FC = () => {
   // Handle scroll to section on mount if hash exists (e.g. coming from Search Page)
   useEffect(() => {
     const hash = window.location.hash;
-    // Only scroll if it's a section ID (starts with # but not #/)
-    if (hash && hash !== '#/' && !hash.startsWith('#/')) {
+    if (hash) {
       // Small delay to ensure DOM is ready
       setTimeout(() => {
         const id = hash.replace('#', '');

@@ -183,7 +183,10 @@ export const PropertyShowcase: React.FC = () => {
                 stiffness: 300,
                 damping: 20
               }}
-              onClick={() => window.location.hash = `#/properti/${prop.id}`}
+              onClick={() => {
+                window.history.pushState({}, '', `/properti/${prop.id}`);
+                window.dispatchEvent(new Event('pushstate'));
+              }}
               className="min-w-[70vw] md:min-w-[400px] snap-center cursor-pointer bg-white rounded-2xl shadow-lg border border-gray-100 p-4"
             >
               <div className="relative aspect-[4/3] overflow-hidden rounded-xl mb-6">
@@ -244,7 +247,10 @@ export const PropertyShowcase: React.FC = () => {
           <div>
             <h3 className="font-serif text-2xl mb-4">Masih banyak lagi...</h3>
             <button 
-              onClick={() => window.location.hash = '#/cari-rumah'}
+              onClick={() => {
+                window.history.pushState({}, '', '/cari-rumah');
+                window.dispatchEvent(new Event('pushstate'));
+              }}
               className="px-6 py-3 border border-luxury-yellow text-luxury-yellow hover:bg-luxury-yellow hover:text-luxury-green transition-colors rounded-full font-semibold inline-block cursor-pointer"
             >
               Lihat Katalog Lengkap

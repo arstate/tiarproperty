@@ -8,27 +8,34 @@ import { AboutPage } from './components/AboutPage';
 import { PropertyDetailPage } from './components/PropertyDetailPage';
 
 export default function App() {
-  const [route, setRoute] = useState(window.location.hash);
+  const [route, setRoute] = useState(window.location.pathname);
 
   useEffect(() => {
     // Scroll behavior setting
     document.documentElement.style.scrollBehavior = 'smooth';
     
-    // Hash router logic
-    const handleHashChange = () => {
-      setRoute(window.location.hash);
+    // Path router logic
+    const handleLocationChange = () => {
+      setRoute(window.location.pathname);
     };
 
-    window.addEventListener('hashchange', handleHashChange);
+    window.addEventListener('popstate', handleLocationChange);
+    
+    // Custom event for programmatic navigation
+    window.addEventListener('pushstate', handleLocationChange);
+    window.addEventListener('replacestate', handleLocationChange);
+
     return () => {
       document.documentElement.style.scrollBehavior = 'auto';
-      window.removeEventListener('hashchange', handleHashChange);
+      window.removeEventListener('popstate', handleLocationChange);
+      window.removeEventListener('pushstate', handleLocationChange);
+      window.removeEventListener('replacestate', handleLocationChange);
     };
   }, []);
 
-  const isSearchPage = route.startsWith('#/cari-rumah');
-  const isAboutPage = route.startsWith('#/about-us');
-  const isPropertyDetailPage = route.startsWith('#/properti/');
+  const isSearchPage = route.startsWith('/cari-rumah');
+  const isAboutPage = route.startsWith('/about-us');
+  const isPropertyDetailPage = route.startsWith('/properti/');
 
   return (
     <div className="min-h-screen bg-luxury-offwhite font-sans overflow-x-hidden selection:bg-luxury-green selection:text-luxury-yellow">

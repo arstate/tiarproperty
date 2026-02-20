@@ -137,9 +137,9 @@ export const PropertyDetailPage: React.FC = () => {
     // Scroll to top on load
     window.scrollTo(0, 0);
 
-    // Parse ID from URL hash: #/properti/1
-    const hash = window.location.hash;
-    const id = parseInt(hash.split('/').pop() || "0");
+    // Parse ID from URL pathname: /properti/1
+    const path = window.location.pathname;
+    const id = parseInt(path.split('/').pop() || "0");
     const found = propertyDB.find(p => p.id === id);
     
     if (found) {
@@ -259,7 +259,10 @@ export const PropertyDetailPage: React.FC = () => {
         {/* Breadcrumb / Back */}
         <div className="max-w-7xl mx-auto px-6 mb-8">
             <button 
-                onClick={() => window.location.hash = '#/cari-rumah'}
+                onClick={() => {
+                    window.history.pushState({}, '', '/cari-rumah');
+                    window.dispatchEvent(new Event('pushstate'));
+                }}
                 className="flex items-center gap-2 text-luxury-slate hover:text-luxury-green transition-colors text-sm font-semibold uppercase tracking-wider cursor-pointer bg-transparent border-none"
             >
                 <ArrowLeft size={16} /> Kembali ke Katalog

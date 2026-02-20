@@ -70,7 +70,10 @@ export const AboutUs: React.FC = () => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => window.location.hash = '#/about-us'}
+              onClick={() => {
+                window.history.pushState({}, '', '/about-us');
+                window.dispatchEvent(new Event('pushstate'));
+              }}
               className="inline-flex items-center gap-2 px-8 py-4 bg-luxury-green text-white rounded-full font-bold uppercase tracking-wider text-xs hover:bg-black transition-colors shadow-xl shadow-luxury-green/20 cursor-pointer"
             >
               Lihat Lengkap About Us <ArrowRight size={16} />
