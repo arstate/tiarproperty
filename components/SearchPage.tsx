@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, MapPin, DollarSign, Filter, Bed, Bath, ChevronDown, Check } from 'lucide-react';
+import { Search, MapPin, DollarSign, Filter, Bed, Bath, ChevronDown, Check, Building2 } from 'lucide-react';
 
 // Mock Data (Expanded)
 const properties = [
@@ -8,6 +8,7 @@ const properties = [
     id: 1,
     title: "The Grand Dhika",
     location: "Sidoarjo Kota",
+    developer: "Ciputra Group",
     priceRange: 500, // in millions for filtering
     priceDisplay: "Start 500jt-an",
     beds: 3,
@@ -20,6 +21,7 @@ const properties = [
     id: 2,
     title: "Urban Living Trosobo",
     location: "Krian",
+    developer: "Jayaland",
     priceRange: 300,
     priceDisplay: "Cicilan 2jt-an",
     beds: 2,
@@ -32,6 +34,7 @@ const properties = [
     id: 3,
     title: "Royal Juanda",
     location: "Sedati",
+    developer: "Pakuwon Group",
     priceRange: 800,
     priceDisplay: "Start 800jt-an",
     beds: 4,
@@ -44,6 +47,7 @@ const properties = [
     id: 4,
     title: "Sapphire Residence",
     location: "Waru",
+    developer: "BSA Land",
     priceRange: 600,
     priceDisplay: "Start 600jt-an",
     beds: 3,
@@ -56,6 +60,7 @@ const properties = [
     id: 5,
     title: "Green View Regency",
     location: "Sidoarjo Kota",
+    developer: "Intiland",
     priceRange: 450,
     priceDisplay: "Start 450jt-an",
     beds: 2,
@@ -68,6 +73,7 @@ const properties = [
     id: 6,
     title: "Citra Garden Estate",
     location: "Waru",
+    developer: "Ciputra Group",
     priceRange: 1200,
     priceDisplay: "Start 1.2M",
     beds: 4,
@@ -151,6 +157,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({ icon, value, options, o
 export const SearchPage: React.FC = () => {
   const [keyword, setKeyword] = useState("");
   const [locationFilter, setLocationFilter] = useState("All");
+  const [developerFilter, setDeveloperFilter] = useState("All");
   const [priceFilter, setPriceFilter] = useState("All");
 
   // Automatically scroll to top when component mounts
@@ -161,19 +168,35 @@ export const SearchPage: React.FC = () => {
   }, []);
 
   const locations = ["All", ...Array.from(new Set(properties.map(p => p.location)))];
+  const developers = ["All", ...Array.from(new Set(properties.map(p => p.developer)))];
   const priceOptions = ["All", "< 500 Juta", "500 - 900 Juta", "> 900 Juta"];
+
+  const handleLocationChange = (val: string) => {
+    setLocationFilter(val);
+    if (val !== "All") {
+      setDeveloperFilter("All");
+    }
+  };
+
+  const handleDeveloperChange = (val: string) => {
+    setDeveloperFilter(val);
+    if (val !== "All") {
+      setLocationFilter("All");
+    }
+  };
   
   const filteredProperties = properties.filter(prop => {
     const matchKeyword = prop.title.toLowerCase().includes(keyword.toLowerCase()) || 
                          prop.location.toLowerCase().includes(keyword.toLowerCase());
     const matchLocation = locationFilter === "All" || prop.location === locationFilter;
+    const matchDeveloper = developerFilter === "All" || prop.developer === developerFilter;
     
     let matchPrice = true;
     if (priceFilter === "< 500 Juta") matchPrice = prop.priceRange < 500;
     if (priceFilter === "500 - 900 Juta") matchPrice = prop.priceRange >= 500 && prop.priceRange <= 900;
     if (priceFilter === "> 900 Juta") matchPrice = prop.priceRange > 900;
 
-    return matchKeyword && matchLocation && matchPrice;
+    return matchKeyword && matchLocation && matchDeveloper && matchPrice;
   });
 
   return (
@@ -203,7 +226,7 @@ export const SearchPage: React.FC = () => {
         >
             <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
                 {/* Keyword Input */}
-                <div className="md:col-span-6 relative group">
+                <div className="md:col-span-4 relative group">
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-luxury-gold transition-colors" size={20} />
                     <input 
                         type="text" 
@@ -214,13 +237,24 @@ export const SearchPage: React.FC = () => {
                     />
                 </div>
 
-                {/* Custom Location Dropdown */}
+                {/* Custom Developer Dropdown */}
                 <div className="md:col-span-3">
+                    <CustomDropdown 
+                        icon={<Building2 size={20} />}
+                        value={developerFilter}
+                        options={developers}
+                        onChange={handleDeveloperChange}
+                        labelMap={(val: string) => val === "All" ? "Semua Developer" : val}
+                    />
+                </div>
+
+                {/* Custom Location Dropdown */}
+                <div className="md:col-span-2">
                     <CustomDropdown 
                         icon={<MapPin size={20} />}
                         value={locationFilter}
                         options={locations}
-                        onChange={setLocationFilter}
+                        onChange={handleLocationChange}
                         labelMap={(val: string) => val === "All" ? "Semua Lokasi" : val}
                     />
                 </div>
@@ -313,7 +347,7 @@ export const SearchPage: React.FC = () => {
                     <Filter size={48} className="mx-auto mb-4 opacity-20" />
                     <p className="text-lg">Tidak ada properti yang cocok dengan filter Anda.</p>
                     <button 
-                        onClick={() => {setKeyword(""); setPriceFilter("All"); setLocationFilter("All")}}
+                        onClick={() => {setKeyword(""); setPriceFilter("All"); setLocationFilter("All"); setDeveloperFilter("All")}}
                         className="mt-4 text-luxury-gold hover:underline"
                     >
                         Reset Filter

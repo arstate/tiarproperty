@@ -29,12 +29,31 @@ export const AboutUs: React.FC = () => {
             <motion.div 
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
+              whileHover="hover"
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
-              className="absolute -bottom-8 -right-8 bg-luxury-yellow p-8 rounded-2xl shadow-xl hidden md:block"
+              className="absolute -bottom-8 -right-8 bg-luxury-yellow p-8 rounded-2xl shadow-xl hidden md:block overflow-hidden group/card cursor-default"
             >
-              <p className="text-luxury-green text-5xl font-bold font-serif">10+</p>
-              <p className="text-luxury-green/80 font-bold text-sm tracking-widest uppercase mt-1">Years Excellence</p>
+              {/* Shimmer/Glossy Effect on Hover */}
+              <motion.div
+                variants={{
+                  hover: { 
+                    x: '250%',
+                    transition: {
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "linear",
+                    }
+                  }
+                }}
+                initial={{ x: '-150%' }}
+                className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-r from-transparent via-white/40 to-transparent -skew-x-30"
+              />
+              
+              <div className="relative z-20">
+                <p className="text-luxury-green text-5xl font-bold font-serif">10+</p>
+                <p className="text-luxury-green/80 font-bold text-sm tracking-widest uppercase mt-1">Years Excellence</p>
+              </div>
             </motion.div>
           </motion.div>
 

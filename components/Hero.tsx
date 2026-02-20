@@ -43,12 +43,30 @@ export const Hero: React.FC = () => {
                   window.history.pushState({}, '', '/cari-rumah');
                   window.dispatchEvent(new Event('pushstate'));
                 }}
-                whileHover={{ scale: 1.02 }}
+                whileHover="hover"
                 whileTap={{ scale: 0.98 }}
                 className="group relative px-8 py-4 bg-luxury-green text-white rounded-none overflow-hidden inline-flex items-center justify-center cursor-pointer"
               >
+                {/* Background Slide Effect */}
                 <span className="absolute inset-0 w-full h-full bg-luxury-yellow/90 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></span>
-                <span className="relative flex items-center gap-2 font-semibold group-hover:text-luxury-green transition-colors">
+                
+                {/* Shimmer/Glossy Effect on Hover */}
+                <motion.div
+                  variants={{
+                    hover: { 
+                      x: '250%',
+                      transition: {
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "linear",
+                      }
+                    }
+                  }}
+                  initial={{ x: '-150%' }}
+                  className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-r from-transparent via-white/40 to-transparent -skew-x-30"
+                />
+
+                <span className="relative z-20 flex items-center gap-2 font-semibold group-hover:text-luxury-green transition-colors">
                   Cari Rumah <ArrowRight size={18} />
                 </span>
               </motion.button>
